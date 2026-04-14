@@ -32,18 +32,37 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install WiX Toolset 3 (required for electron-builder msi target)
+      - name: Locate WiX Toolset 3
         shell: pwsh
         run: |
-          choco install wixtoolset --no-progress --yes
-          echo "C:\Program Files (x86)\WiX Toolset v3.11\bin" >> $env:GITHUB_PATH
+          # windows-latest ships WiX 3.11 pre-installed — just find it and
+          # expose it to the rest of the job. If it's ever missing, fall back
+          # to downloading the official binaries zip directly (no chocolatey,
+          # no lib-bad state to trip over).
+          $preinstalled = "C:\Program Files (x86)\WiX Toolset v3.11\bin"
+          if (Test-Path "$preinstalled\candle.exe") {
+            Write-Host "Found pre-installed WiX at $preinstalled"
+            $wixBin = $preinstalled
+          } else {
+            Write-Host "WiX not pre-installed — downloading WiX 3.11 binaries..."
+            $zipUrl = "https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip"
+            $zipFile = "$env:RUNNER_TEMP\wix311.zip"
+            $extract = "$env:RUNNER_TEMP\wix311"
+            Invoke-WebRequest -Uri $zipUrl -OutFile $zipFile
+            New-Item -ItemType Directory -Force -Path $extract | Out-Null
+            Expand-Archive -Path $zipFile -DestinationPath $extract -Force
+            $wixBin = $extract
+          }
+          "$wixBin" | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8
+          "WIX=$wixBin" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          & "$wixBin\candle.exe" -? | Select-Object -First 2
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
       - name: Build .msi installer
         env:
-          # electron-builder wants this on CI
+          # electron-builder wants this off on CI (no code-signing cert)
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
         run: npm run dist:msi
 
