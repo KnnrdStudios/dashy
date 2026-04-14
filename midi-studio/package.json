@@ -1,0 +1,54 @@
+{
+  "name": "midi-studio",
+  "productName": "MIDI Studio",
+  "version": "0.1.0",
+  "description": "Local practice app for the Akai MPK Mini and Maono AME2. Piano, drum pads, metronome, MIDI looper with SMF export, and a podcast recorder — all offline.",
+  "author": "KnnrdStudios",
+  "license": "MIT",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "serve": "node launch.js",
+    "dist": "electron-builder",
+    "dist:msi": "electron-builder --win msi",
+    "dist:nsis": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "31.7.7",
+    "electron-builder": "24.13.3"
+  },
+  "build": {
+    "appId": "studio.knnrd.midistudio",
+    "productName": "MIDI Studio",
+    "copyright": "Copyright © 2026 KnnrdStudios",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "css/**/*",
+      "js/**/*",
+      "assets/**/*",
+      "!launch.js",
+      "!dist/**/*",
+      "!node_modules/.cache/**/*"
+    ],
+    "win": {
+      "target": [
+        { "target": "msi", "arch": ["x64"] }
+      ],
+      "artifactName": "MIDI-Studio-${version}-${arch}.${ext}"
+    },
+    "msi": {
+      "oneClick": false,
+      "perMachine": false,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "MIDI Studio"
+    }
+  }
+}

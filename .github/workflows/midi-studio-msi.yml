@@ -1,0 +1,85 @@
+name: Build MIDI Studio MSI
+
+# Builds a Windows .msi installer for the MIDI Studio desktop app.
+# Runs on every push to the feature branch and on manual dispatch.
+# The resulting .msi is uploaded as a workflow artifact and (for tag pushes)
+# attached to a GitHub Release.
+
+on:
+  push:
+    branches:
+      - "claude/midi-learning-desktop-app-ZlzUt"
+    paths:
+      - "midi-studio/**"
+      - ".github/workflows/midi-studio-msi.yml"
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build-msi:
+    name: Build .msi on Windows
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: midi-studio
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Locate WiX Toolset 3
+        shell: pwsh
+        run: |
+          # windows-latest ships WiX 3.11 pre-installed — just find it and
+          # expose it to the rest of the job. If it's ever missing, fall back
+          # to downloading the official binaries zip directly (no chocolatey,
+          # no lib-bad state to trip over).
+          $preinstalled = "C:\Program Files (x86)\WiX Toolset v3.11\bin"
+          if (Test-Path "$preinstalled\candle.exe") {
+            Write-Host "Found pre-installed WiX at $preinstalled"
+            $wixBin = $preinstalled
+          } else {
+            Write-Host "WiX not pre-installed — downloading WiX 3.11 binaries..."
+            $zipUrl = "https://github.com/wixtoolset/wix3/releases/download/wix3112rtm/wix311-binaries.zip"
+            $zipFile = "$env:RUNNER_TEMP\wix311.zip"
+            $extract = "$env:RUNNER_TEMP\wix311"
+            Invoke-WebRequest -Uri $zipUrl -OutFile $zipFile
+            New-Item -ItemType Directory -Force -Path $extract | Out-Null
+            Expand-Archive -Path $zipFile -DestinationPath $extract -Force
+            $wixBin = $extract
+          }
+          "$wixBin" | Out-File -FilePath $env:GITHUB_PATH -Append -Encoding utf8
+          "WIX=$wixBin" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          & "$wixBin\candle.exe" -? | Select-Object -First 2
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Build .msi installer
+        env:
+          # electron-builder wants this off on CI (no code-signing cert)
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+        run: npm run dist:msi
+
+      - name: List build output
+        shell: pwsh
+        run: Get-ChildItem -Path dist -Recurse | Select-Object FullName, Length
+
+      - name: Upload MSI as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: midi-studio-msi
+          path: midi-studio/dist/*.msi
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Attach MSI to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: midi-studio/dist/*.msi
