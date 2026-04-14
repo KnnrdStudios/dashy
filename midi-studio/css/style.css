@@ -564,6 +564,69 @@ kbd {
 }
 .recipe li strong { color: var(--accent); }
 
+/* -------- Looper -------- */
+.loop-track {
+  position: relative;
+  height: 48px;
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.loop-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  left: 0%;
+  transition: left 0.03s linear;
+  box-shadow: 0 0 8px var(--accent);
+}
+.primary-btn.recording {
+  background: var(--bad);
+  border-color: var(--bad);
+  animation: rec-pulse 1s infinite;
+}
+@keyframes rec-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* -------- Challenge cards -------- */
+.challenge-target {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin: 12px 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 14px;
+}
+.target-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.target-name {
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.challenge-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: monospace;
+}
+
 /* -------- Footer -------- */
 .footer {
   display: flex;

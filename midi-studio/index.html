@@ -30,6 +30,7 @@
     <nav class="tabs" role="tablist">
       <button class="tab active" data-tab="play">Play</button>
       <button class="tab" data-tab="learn">Learn</button>
+      <button class="tab" data-tab="looper">Looper</button>
       <button class="tab" data-tab="pads">Pads</button>
       <button class="tab" data-tab="metronome">Metronome</button>
       <button class="tab" data-tab="record">Podcast / Record</button>
@@ -207,6 +208,117 @@
             <div class="hint">Score: <span id="ear-score">0 / 0</span></div>
           </div>
         </div>
+
+        <div class="panel-grid two-col">
+          <div class="card">
+            <h2>Chord Challenge</h2>
+            <p class="muted">We name a chord, you play it on the MPK. Detected automatically.</p>
+            <div class="control-row">
+              <label>Difficulty
+                <select id="cc-difficulty">
+                  <option value="easy">Easy · maj / min</option>
+                  <option value="medium">Medium · + 7ths</option>
+                  <option value="hard">Hard · all qualities</option>
+                </select>
+              </label>
+              <button class="primary-btn" id="cc-start">Start</button>
+              <button class="ghost-btn" id="cc-skip">Skip</button>
+            </div>
+            <div class="challenge-target">
+              <span class="target-label">Play</span>
+              <span id="cc-target" class="target-name">—</span>
+            </div>
+            <div class="challenge-meta">
+              <span id="cc-score">0 / 0</span>
+              <span id="cc-streak">Streak 0 · Best 0</span>
+              <span id="cc-feedback" class="ear-feedback"></span>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Scale Runner</h2>
+            <p class="muted">We highlight the next note, you hit it. Full scale up &amp; down, timed.</p>
+            <div class="control-row">
+              <label>Root
+                <select id="sr-root"></select>
+              </label>
+              <label>Scale
+                <select id="sr-type">
+                  <option value="major">Major</option>
+                  <option value="natural_minor">Natural Minor</option>
+                  <option value="major_pentatonic">Major Pentatonic</option>
+                  <option value="minor_pentatonic">Minor Pentatonic</option>
+                  <option value="blues">Blues</option>
+                  <option value="dorian">Dorian</option>
+                  <option value="mixolydian">Mixolydian</option>
+                </select>
+              </label>
+              <button class="primary-btn" id="sr-start">Start</button>
+            </div>
+            <div class="challenge-target">
+              <span class="target-label">Next</span>
+              <span id="sr-next" class="target-name">—</span>
+            </div>
+            <div class="challenge-meta">
+              <span id="sr-progress">—</span>
+              <span id="sr-time">0.0s</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ LOOPER TAB ============ -->
+      <section class="tab-panel" data-panel="looper">
+        <div class="card">
+          <h2>MIDI Looper</h2>
+          <p class="muted">
+            Record a chord loop, overdub a bass line, overdub a melody — then
+            export as a <strong>.mid</strong> file to drag into any DAW.
+            Every layer you record plays forever through the synth on your speakers.
+          </p>
+          <div class="control-row">
+            <label>Bars
+              <select id="loop-bars">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="4" selected>4</option>
+                <option value="8">8</option>
+                <option value="16">16</option>
+              </select>
+            </label>
+            <label>BPM
+              <input type="number" id="loop-bpm" min="40" max="220" value="100" style="width:80px;"/>
+            </label>
+            <button class="ghost-btn" id="loop-sync-bpm">Sync BPM</button>
+            <label>Quantize
+              <select id="loop-quantize">
+                <option value="off" selected>Off</option>
+                <option value="4">Quarter</option>
+                <option value="8">8th</option>
+                <option value="16">16th</option>
+              </select>
+            </label>
+          </div>
+          <div class="control-row">
+            <button class="primary-btn" id="loop-record">⏺ Record</button>
+            <button class="ghost-btn" id="loop-play">▶ Play</button>
+            <button class="ghost-btn" id="loop-stop">■ Stop</button>
+            <button class="ghost-btn" id="loop-clear">✕ Clear All</button>
+            <button class="ghost-btn" id="loop-export">↓ Export .mid</button>
+            <span id="loop-bar-info" class="muted"></span>
+          </div>
+          <div class="loop-track">
+            <div id="loop-playhead" class="loop-playhead"></div>
+          </div>
+          <h3>Layers</h3>
+          <ul id="loop-layers" class="rec-list"><li class="muted">No layers yet — hit Record.</li></ul>
+          <div class="hint">
+            Workflow: set bars &amp; BPM → hit <em>Record</em> (1 bar count-in) →
+            play a chord progression → <em>Stop Rec</em>. It now loops. Hit
+            <em>Record</em> again to overdub a melody on top. Export to .mid when
+            happy, or just jam over it forever.
+          </div>
+        </div>
       </section>
 
       <!-- ============ PADS TAB ============ -->
@@ -366,6 +478,9 @@
     <script src="js/midi.js"></script>
     <script src="js/piano.js"></script>
     <script src="js/trainer.js"></script>
+    <script src="js/challenge.js"></script>
+    <script src="js/midifile.js"></script>
+    <script src="js/looper.js"></script>
     <script src="js/drumpads.js"></script>
     <script src="js/metronome.js"></script>
     <script src="js/recorder.js"></script>

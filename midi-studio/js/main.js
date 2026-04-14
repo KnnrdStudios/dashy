@@ -87,10 +87,12 @@
     state.heldMidis.add(m);
     MS.Synth.noteOn(m, velocity);
     MS.Piano.highlightActive(m, true);
-    // Forward to pads if in range
     if (MS.Pads.padByNote && MS.Pads.padByNote[m]) {
       MS.Pads.hit(m, velocity);
     }
+    if (MS.Looper) MS.Looper.captureNoteOn(m, velocity);
+    if (MS.ChordChallenge) MS.ChordChallenge.onNoteOn(m);
+    if (MS.ScaleRunner) MS.ScaleRunner.onNoteOn(m);
     updateNowPlaying(m, velocity);
   }
 
@@ -102,6 +104,8 @@
     if (MS.Pads.padByNote && MS.Pads.padByNote[m]) {
       MS.Pads.release(m);
     }
+    if (MS.Looper) MS.Looper.captureNoteOff(m);
+    if (MS.ChordChallenge) MS.ChordChallenge.onNoteOff(m);
     updateNowPlaying(null);
   }
 
@@ -176,6 +180,9 @@
     MS.Piano.onNoteOff = (m) => onNoteOff(m - state.octaveShift * 12);
 
     MS.Trainer.init();
+    MS.ChordChallenge.init();
+    MS.ScaleRunner.init();
+    MS.Looper.init();
     MS.Pads.init();
     MS.Metronome.init();
     MS.Guides.init();
