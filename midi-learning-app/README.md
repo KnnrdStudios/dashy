@@ -27,6 +27,39 @@ command to your PATH.
 
 ---
 
+## Install on Windows (native, no WSL)
+
+**Fastest path — portable, no install:**
+
+1. Install [Python 3](https://www.python.org/downloads/) (tick "Add python.exe to PATH" during setup). Or from the Microsoft Store, or `winget install Python.Python.3.12`.
+2. Install Chrome, Edge, or Brave if you don't already have one.
+3. Download this folder (`midi-learning-app`) to anywhere on your PC.
+4. **Double-click `Signal.bat`.**
+
+That's it. A small console window starts the local server, then Chrome/Edge opens in app mode. Plug your MPK Mini in before launching.
+
+**Full install (Start Menu + Desktop shortcut + `signal` command):**
+
+Open PowerShell in the `midi-learning-app` folder and run:
+
+```powershell
+# Allow the script once in this session:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+.\install.ps1              # install
+.\install.ps1 -Run         # install and launch
+.\install.ps1 -Uninstall   # remove everything
+.\install.ps1 -NoDesktop   # skip desktop shortcut
+```
+
+This copies the app to `%LOCALAPPDATA%\Signal`, creates a `signal.cmd` launcher on your user PATH, and adds Start Menu + Desktop shortcuts. After install you can launch from anywhere by:
+
+- Double-clicking the desktop icon
+- Typing `signal` in a new terminal
+- Picking Signal from the Start Menu
+
+---
+
 ## Install on Ubuntu or WSL (Ubuntu on Windows)
 
 ```bash
@@ -149,6 +182,8 @@ MPK Mini and use the real keys — all three input methods work simultaneously.
 ```
 midi-learning-app/
 ├── index.html         # Main shell + tabs
+├── Signal.bat         # Windows portable launcher (double-click to run)
+├── install.ps1        # Native Windows installer (PowerShell)
 ├── install.sh         # Ubuntu / WSL installer
 ├── css/
 │   └── styles.css     # All styling
