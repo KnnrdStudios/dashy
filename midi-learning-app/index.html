@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Signal — MIDI & Mixer Learning Studio</title>
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">~</div>
+    <div>
+      <h1>Signal</h1>
+      <p class="tagline">Learn the MPK Mini &amp; Maono AME2 — play, practice, podcast.</p>
+    </div>
+  </div>
+  <div class="status">
+    <div class="midi-status" id="midi-status">
+      <span class="dot" id="midi-dot"></span>
+      <span id="midi-label">MIDI: scanning…</span>
+    </div>
+    <div class="audio-status">
+      <button id="audio-enable" class="btn-ghost">Enable audio</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="play" class="tab active">Play</button>
+  <button data-tab="mpk" class="tab">MPK Mini</button>
+  <button data-tab="ame2" class="tab">AME2 Mixer</button>
+  <button data-tab="theory" class="tab">Theory</button>
+  <button data-tab="practice" class="tab">Practice</button>
+  <button data-tab="podcast" class="tab">Podcast</button>
+  <button data-tab="progress" class="tab">Progress</button>
+</nav>
+
+<main>
+
+  <!-- ===== PLAY ===== -->
+  <section class="view active" id="view-play">
+    <div class="row">
+      <div class="card grow">
+        <h2>Live Keyboard</h2>
+        <p class="muted">Hit your MPK Mini keys, click the onscreen keys, or use your computer keyboard (<kbd>A</kbd>–<kbd>L</kbd> &amp; <kbd>W</kbd>/<kbd>E</kbd>/<kbd>T</kbd>/<kbd>Y</kbd>/<kbd>U</kbd>).</p>
+        <div id="keyboard"></div>
+        <div class="readout">
+          <span id="note-readout">—</span>
+          <span id="vel-readout" class="muted">vel 0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h3>Synth</h3>
+        <label>Preset
+          <select id="preset">
+            <option value="piano">Piano</option>
+            <option value="rhodes">Rhodes EP</option>
+            <option value="pad">Analog Pad</option>
+            <option value="lead">Saw Lead</option>
+            <option value="bass">Sub Bass</option>
+            <option value="bell">Glass Bell</option>
+            <option value="organ">Organ</option>
+          </select>
+        </label>
+        <label>Volume <input type="range" id="volume" min="0" max="1" step="0.01" value="0.7"/></label>
+        <label>Reverb <input type="range" id="reverb" min="0" max="1" step="0.01" value="0.25"/></label>
+        <label>Octave
+          <span class="octave-ctrl">
+            <button id="oct-down">−</button>
+            <span id="oct-label">0</span>
+            <button id="oct-up">+</button>
+          </span>
+        </label>
+        <label><input type="checkbox" id="sustain" /> Sustain</label>
+      </div>
+
+      <div class="card">
+        <h3>Loop Recorder</h3>
+        <p class="muted">Capture a short riff and loop it. Great for layering over your own playing.</p>
+        <div class="row">
+          <button id="rec-btn" class="btn-accent">● Record</button>
+          <button id="play-btn">▶ Play</button>
+          <button id="stop-btn">■ Stop</button>
+          <button id="clear-btn" class="btn-ghost">Clear</button>
+        </div>
+        <div class="meter"><div id="rec-fill"></div></div>
+        <p class="muted" id="rec-status">Empty buffer.</p>
+      </div>
+
+      <div class="card">
+        <h3>MPK Pads → Drums</h3>
+        <p class="muted">Pads 1–8 trigger a built-in drum kit. Bank B (pads 9–16) plays a C minor chord pad.</p>
+        <div id="pad-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MPK MINI ===== -->
+  <section class="view" id="view-mpk">
+    <div class="card">
+      <h2>Akai Pro MPK Mini — Tour</h2>
+      <p class="muted">Click any part of the controller to see what it does. Everything highlighted in orange is interactive.</p>
+      <div id="mpk-diagram"></div>
+      <div class="hint-box" id="mpk-hint">
+        <strong>Tip:</strong> Select a control on the diagram to see its full explanation here.
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h3>Pad Trainer</h3>
+        <p class="muted">A pad lights up — hit that pad on your MPK. Builds muscle memory for Bank A.</p>
+        <button id="pad-train-start" class="btn-accent">Start</button>
+        <div id="pad-train-grid"></div>
+        <p id="pad-train-score" class="muted">Score: 0 / 0</p>
+      </div>
+      <div class="card">
+        <h3>Cheat Sheet</h3>
+        <ul class="cheat">
+          <li><strong>Full Level</strong> — forces every pad to velocity 127. Great for recording drums without dynamics.</li>
+          <li><strong>Note Repeat</strong> — hold to play repeating notes at the tap-tempo rate; pick 1/4, 1/8, 1/16, 1/32.</li>
+          <li><strong>Arpeggiator</strong> — hold chord, it plays the notes in sequence. Use <em>Mode</em> (up/down/random) + <em>Octave</em> + <em>Rate</em>.</li>
+          <li><strong>Tap Tempo</strong> — tap 4 times to set the BPM that arpeggiator &amp; note repeat sync to.</li>
+          <li><strong>Joystick</strong> — X axis = pitch bend, Y axis = modulation. Centre it when you stop to avoid drift.</li>
+          <li><strong>Prog Change</strong> — sends a MIDI program change so your DAW swaps instruments without touching the mouse.</li>
+          <li><strong>CC</strong> — assign the 8 knobs to any MIDI CC in the MPK editor to control plugin parameters.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== AME2 ===== -->
+  <section class="view" id="view-ame2">
+    <div class="card">
+      <h2>Maono AME2 — Tour</h2>
+      <p class="muted">Click any control on the mixer to read exactly what it does, why it matters, and when you'd touch it in a podcast vs. a music session.</p>
+      <div id="ame2-diagram"></div>
+      <div class="hint-box" id="ame2-hint">
+        <strong>Tip:</strong> Select a control to see its explanation.
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h3>Signal Flow</h3>
+        <div id="signal-flow"></div>
+        <p class="muted">Audio always moves left→right: the thing you touch last is closest to the speaker.</p>
+      </div>
+      <div class="card">
+        <h3>Gain Staging in 60 seconds</h3>
+        <ol class="steps">
+          <li>Turn the channel <strong>Gain</strong> all the way down.</li>
+          <li>Put on headphones and talk/sing at your loudest realistic level.</li>
+          <li>Raise the gain until the loudest peaks hit the <strong>yellow/green</strong> LED, never red.</li>
+          <li>Set the <strong>fader/monitor</strong> to a comfortable listening volume — that doesn't change the recording level.</li>
+          <li>If you add FX (compression, reverb), re-check that peaks still don't clip.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card grow">
+        <h3>Scenario Walkthroughs</h3>
+        <div class="scenario-pick">
+          <button class="pill active" data-scenario="podcast">Podcast setup</button>
+          <button class="pill" data-scenario="music">Music / vocals setup</button>
+        </div>
+        <ol id="scenario-steps" class="steps"></ol>
+      </div>
+      <div class="card">
+        <h3>AME2 Quiz</h3>
+        <p class="muted">Test yourself. Which control does this?</p>
+        <div id="ame2-quiz"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== THEORY ===== -->
+  <section class="view" id="view-theory">
+    <div class="row">
+      <div class="card grow">
+        <h2>Scales</h2>
+        <div class="row compact">
+          <label>Root
+            <select id="scale-root"></select>
+          </label>
+          <label>Type
+            <select id="scale-type">
+              <option value="major">Major</option>
+              <option value="minor">Minor (natural)</option>
+              <option value="harmonic_minor">Harmonic minor</option>
+              <option value="melodic_minor">Melodic minor</option>
+              <option value="pentatonic_major">Major pentatonic</option>
+              <option value="pentatonic_minor">Minor pentatonic</option>
+              <option value="blues">Blues</option>
+              <option value="dorian">Dorian</option>
+              <option value="mixolydian">Mixolydian</option>
+            </select>
+          </label>
+          <button id="scale-play">Play scale</button>
+        </div>
+        <div id="scale-keyboard"></div>
+        <p id="scale-notes" class="muted"></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card">
+        <h3>Chords</h3>
+        <div class="row compact">
+          <label>Root <select id="chord-root"></select></label>
+          <label>Quality
+            <select id="chord-type">
+              <option value="maj">Major</option>
+              <option value="min">Minor</option>
+              <option value="dim">Diminished</option>
+              <option value="aug">Augmented</option>
+              <option value="maj7">Major 7</option>
+              <option value="min7">Minor 7</option>
+              <option value="dom7">Dominant 7</option>
+              <option value="sus2">Sus2</option>
+              <option value="sus4">Sus4</option>
+            </select>
+          </label>
+          <button id="chord-play">Play chord</button>
+        </div>
+        <p id="chord-notes" class="muted"></p>
+      </div>
+      <div class="card">
+        <h3>Circle of Fifths</h3>
+        <div id="circle-of-fifths"></div>
+      </div>
+      <div class="card">
+        <h3>Ear Training</h3>
+        <p class="muted">I'll play a note in the current octave. Play or click the matching key.</p>
+        <button id="ear-new">New note</button>
+        <button id="ear-replay">Replay</button>
+        <p id="ear-result" class="muted">Press "New note" to begin.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRACTICE ===== -->
+  <section class="view" id="view-practice">
+    <div class="row">
+      <div class="card">
+        <h2>Metronome</h2>
+        <label>BPM
+          <input type="range" id="bpm" min="40" max="220" value="100"/>
+          <span id="bpm-label">100</span>
+        </label>
+        <label>Meter
+          <select id="meter">
+            <option>4/4</option><option>3/4</option><option>6/8</option><option>5/4</option>
+          </select>
+        </label>
+        <button id="metro-toggle" class="btn-accent">Start</button>
+        <div id="metro-viz" class="metro-viz"></div>
+      </div>
+      <div class="card grow">
+        <h2>Drum Machine</h2>
+        <p class="muted">Jam over a loop while practicing scales or melodies.</p>
+        <div class="row compact">
+          <label>Pattern
+            <select id="drum-pattern">
+              <option value="rock">Rock 4/4</option>
+              <option value="hiphop">Hip-hop</option>
+              <option value="funk">Funk</option>
+              <option value="halftime">Half-time</option>
+              <option value="bossa">Bossa</option>
+            </select>
+          </label>
+          <button id="drum-toggle">Start</button>
+        </div>
+        <div id="drum-grid"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h3>Chord Progression Jam</h3>
+        <p class="muted">Endless loop you can solo over. Use the Theory tab to find notes that fit.</p>
+        <label>Progression
+          <select id="prog-select">
+            <option value="1-5-6-4">I–V–vi–IV (pop)</option>
+            <option value="2-5-1">ii–V–I (jazz)</option>
+            <option value="1-6-4-5">I–vi–IV–V (50s)</option>
+            <option value="1-4-5">I–IV–V (blues base)</option>
+            <option value="6-4-1-5">vi–IV–I–V (sad pop)</option>
+          </select>
+        </label>
+        <label>Key <select id="prog-key"></select></label>
+        <button id="prog-toggle" class="btn-accent">Start jam</button>
+        <p id="prog-current" class="muted">—</p>
+      </div>
+      <div class="card">
+        <h3>Daily Routine Generator</h3>
+        <p class="muted">A 15-minute structured session tailored for beginners.</p>
+        <button id="routine-gen">Generate today's routine</button>
+        <ol id="routine-list" class="steps"></ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PODCAST ===== -->
+  <section class="view" id="view-podcast">
+    <div class="row">
+      <div class="card grow">
+        <h2>Pre-Session Checklist</h2>
+        <p class="muted">Tick these off before every recording. Your future self will thank you.</p>
+        <ul id="podcast-checklist" class="checklist"></ul>
+      </div>
+      <div class="card">
+        <h3>Level Targets</h3>
+        <ul class="cheat">
+          <li>Spoken voice average: <strong>-18 to -12 dBFS</strong></li>
+          <li>Peaks never above: <strong>-6 dBFS</strong></li>
+          <li>Noise floor below: <strong>-60 dBFS</strong></li>
+          <li>On AME2: peaks should briefly touch yellow, never red.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card">
+        <h3>Mic Technique</h3>
+        <ul class="cheat">
+          <li><strong>Distance</strong>: one fist (≈ 4 inches) from the mic for a warm, full voice.</li>
+          <li><strong>Angle</strong>: speak slightly off-axis (≈ 15°) to reduce plosives.</li>
+          <li><strong>Pop filter</strong>: a must if you don't have one built into the mic.</li>
+          <li><strong>Posture</strong>: sit up, face forward — consistent distance = consistent tone.</li>
+          <li><strong>Headphones</strong>: closed-back only. Open-back will bleed into the mic.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>AME2 Podcast Cheat Sheet</h3>
+        <ul class="cheat">
+          <li>Switch to <strong>Podcast Mode</strong> so auto-tune/voice-FX stay out of your way.</li>
+          <li>Engage <strong>Phantom Power (48V)</strong> only for condenser mics.</li>
+          <li>Turn on <strong>Monitor Mix</strong> so you hear yourself with zero latency.</li>
+          <li>Assign sound <strong>Pads</strong> to intro sting, outro sting, laugh track, applause.</li>
+          <li>Use <strong>Ducking</strong> if you're playing background music — your voice auto-lowers it.</li>
+          <li>Record a <strong>30-second test</strong> and listen back before every real take.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROGRESS ===== -->
+  <section class="view" id="view-progress">
+    <div class="row">
+      <div class="card grow">
+        <h2>Practice Log</h2>
+        <div class="row compact">
+          <input id="log-note" placeholder="What did you practice today?" />
+          <input id="log-minutes" type="number" placeholder="minutes" min="1" style="width:100px"/>
+          <button id="log-add" class="btn-accent">Log session</button>
+        </div>
+        <p class="muted" id="log-stats">—</p>
+        <ul id="log-list" class="log-list"></ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card">
+        <h3>Quiz Scores</h3>
+        <ul id="quiz-scores" class="cheat"><li class="muted">No scores yet.</li></ul>
+      </div>
+      <div class="card">
+        <h3>Reset</h3>
+        <p class="muted">Wipes all local progress. Cannot be undone.</p>
+        <button id="reset-all" class="btn-ghost">Reset everything</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span>Signal runs 100% locally in your browser. Nothing leaves your machine.</span>
+  <span id="foot-version">v0.1</span>
+</footer>
+
+<script src="js/storage.js"></script>
+<script src="js/theory.js"></script>
+<script src="js/synth.js"></script>
+<script src="js/drums.js"></script>
+<script src="js/keyboard.js"></script>
+<script src="js/midi.js"></script>
+<script src="js/mpk.js"></script>
+<script src="js/ame2.js"></script>
+<script src="js/practice.js"></script>
+<script src="js/podcast.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
