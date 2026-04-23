@@ -8,14 +8,54 @@
   <meta property="og:title" content="Vintage 2 Digital — Preserve Your Memories Forever" />
   <meta property="og:description" content="Professional media digitization. VHS, film, photos, slides, cassettes — restored in stunning quality." />
   <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Vintage 2 Digital — Preserve Your Memories Forever" />
+  <meta name="twitter:description" content="Professional media digitization. VHS, film, photos, slides, cassettes — restored in stunning quality." />
+  <meta name="twitter:image" content="assets/og-image.svg" />
+  <link rel="canonical" href="https://vintage2digital.com/" />
   <title>Vintage 2 Digital — Preserve Your Memories Forever</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Permanent+Marker&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/styles.css" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%BC%3C/text%3E%3C/svg%3E" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Vintage 2 Digital",
+    "image": "https://vintage2digital.com/assets/og-image.svg",
+    "url": "https://vintage2digital.com/",
+    "telephone": "+1-503-555-0123",
+    "email": "hello@vintage2digital.com",
+    "priceRange": "$$",
+    "description": "Professional media digitization — VHS, film, photos, slides, and audio cassettes transferred to pristine digital formats.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "2410 SE Division St",
+      "addressLocality": "Portland",
+      "addressRegion": "OR",
+      "postalCode": "97202",
+      "addressCountry": "US"
+    },
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    }],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "1200"
+    },
+    "sameAs": []
+  }
+  </script>
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a>
   <!-- Scanline overlay for vintage feel -->
   <div class="scanlines" aria-hidden="true"></div>
   <div class="grain" aria-hidden="true"></div>
@@ -41,7 +81,8 @@
     </div>
   </header>
 
-  <main id="top">
+  <main id="main" tabindex="-1">
+    <span id="top" aria-hidden="true"></span>
     <!-- Hero -->
     <section class="hero">
       <div class="hero-bg">
@@ -471,7 +512,7 @@
     <div class="footer-bottom container">
       <p>&copy; <span id="year"></span> Vintage 2 Digital. All memories reserved.</p>
       <p class="footer-links">
-        <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Accessibility</a>
+        <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="#contact">Accessibility</a>
       </p>
     </div>
   </footer>

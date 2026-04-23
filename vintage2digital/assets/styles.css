@@ -690,7 +690,7 @@ p { margin: 0 0 1em; }
   box-shadow: var(--shadow);
   width: 220px;
   font-family: 'Permanent Marker', var(--font-display), cursive;
-  font-size: 1rem;
+  font-size: 1.05rem;
   text-align: center;
   transition: transform .4s ease, box-shadow .4s ease;
 }
@@ -1044,6 +1044,119 @@ p { margin: 0 0 1em; }
   .field-row { grid-template-columns: 1fr; }
   .contact-form { padding: 24px; }
   .polaroid { width: 180px; }
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 10000;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: 8px;
+  outline: 3px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.btn:focus-visible {
+  outline-offset: 4px;
+}
+.nav-links a:focus-visible {
+  outline-offset: 6px;
+}
+
+/* ==========================================================================
+   Subpages (privacy / terms)
+   ========================================================================== */
+
+.page-doc {
+  padding: clamp(56px, 8vw, 96px) 0 clamp(72px, 10vw, 120px);
+  background:
+    radial-gradient(600px 300px at 90% 0%, rgba(232,85,58,0.06), transparent 60%),
+    var(--cream);
+}
+.page-doc article { max-width: 780px; }
+.page-head {
+  text-align: left;
+  margin-bottom: clamp(28px, 4vw, 48px);
+  padding-bottom: 24px;
+  border-bottom: 1px dashed var(--line);
+}
+.page-head h1 {
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  margin: 12px 0 8px;
+}
+.page-doc h2 {
+  font-size: 1.45rem;
+  margin: 36px 0 12px;
+}
+.page-doc p {
+  font-size: 1.02rem;
+  color: var(--ink);
+}
+.page-doc a {
+  border-bottom: 1px dotted var(--accent);
+}
+
+/* ==========================================================================
+   404
+   ========================================================================== */
+
+.page-404 {
+  min-height: calc(100vh - 88px);
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background:
+    radial-gradient(800px 400px at 50% 20%, rgba(232,85,58,0.12), transparent 60%),
+    var(--cream);
+}
+.page-404 h1 {
+  font-size: clamp(7rem, 18vw, 14rem);
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -.04em;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--ink) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 6px 60px rgba(232,85,58,0.25);
+}
+.page-404-tape {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  letter-spacing: .3em;
+  color: var(--accent);
+  padding: 6px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  margin-bottom: 24px;
+  animation: blink 1.2s steps(2, end) infinite;
+}
+@keyframes blink {
+  50% { opacity: .35; }
+}
+.page-404-sub {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 16px auto 32px;
 }
 
 @media (prefers-reduced-motion: reduce) {

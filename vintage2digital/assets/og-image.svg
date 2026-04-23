@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Vintage 2 Digital — Preserve your memories forever.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbf7ee"/>
+      <stop offset="1" stop-color="#ede3cf"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.1" r="0.7">
+      <stop offset="0" stop-color="#e8553a" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#e8553a" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="scan" width="6" height="6" patternUnits="userSpaceOnUse">
+      <rect width="6" height="1" fill="#0f0d1a" opacity="0.05"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#scan)"/>
+
+  <!-- Tape reel decoration -->
+  <g transform="translate(1000 150)" opacity="0.18">
+    <circle r="170" fill="none" stroke="#0f0d1a" stroke-width="18"/>
+    <circle r="120" fill="none" stroke="#0f0d1a" stroke-width="1" stroke-dasharray="2 4"/>
+    <circle r="80"  fill="none" stroke="#0f0d1a" stroke-width="1" stroke-dasharray="2 4"/>
+    <circle r="28"  fill="#0f0d1a"/>
+  </g>
+  <g transform="translate(140 540)" opacity="0.12">
+    <circle r="140" fill="none" stroke="#0f0d1a" stroke-width="14"/>
+    <circle r="24"  fill="#0f0d1a"/>
+  </g>
+
+  <!-- Brand mark -->
+  <g transform="translate(80 80)">
+    <rect width="76" height="76" rx="18" fill="#0f0d1a"/>
+    <text x="38" y="54" text-anchor="middle" font-family="Georgia, 'Playfair Display', serif"
+          font-weight="900" font-size="38" fill="#fbf7ee">
+      V<tspan fill="#f5b14c">2</tspan>D
+    </text>
+    <text x="100" y="50" font-family="Georgia, 'Playfair Display', serif"
+          font-weight="700" font-size="30" fill="#0f0d1a">
+      Vintage <tspan fill="#6a6375">2</tspan> Digital
+    </text>
+  </g>
+
+  <!-- Eyebrow -->
+  <g transform="translate(80 220)">
+    <circle cx="10" cy="10" r="7" fill="#e8553a"/>
+    <text x="30" y="16" font-family="'Courier New', monospace"
+          font-size="18" letter-spacing="4" fill="#6a6375">
+      EST. 2011 · TRUSTED BY 12,000+ FAMILIES
+    </text>
+  </g>
+
+  <!-- Headline -->
+  <text x="80" y="330" font-family="Georgia, 'Playfair Display', serif"
+        font-weight="900" font-size="92" fill="#0f0d1a">
+    Your memories
+  </text>
+  <text x="80" y="430" font-family="Georgia, 'Playfair Display', serif"
+        font-weight="900" font-style="italic" font-size="92" fill="#e8553a">
+    deserve forever.
+  </text>
+
+  <!-- Sub -->
+  <text x="80" y="495" font-family="'Helvetica Neue', Arial, sans-serif"
+        font-size="26" fill="#6a6375">
+    VHS · Film · Photos · Slides · Audio — restored and digitized.
+  </text>
+
+  <!-- URL -->
+  <text x="80" y="570" font-family="'Courier New', monospace"
+        font-size="22" letter-spacing="3" fill="#0f0d1a">
+    vintage2digital.com
+  </text>
+</svg>
