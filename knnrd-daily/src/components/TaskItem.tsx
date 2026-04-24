@@ -27,14 +27,7 @@ export default function TaskItem({ task, selected, onToggle, onSelect }: Props) 
 
   return (
     <div
-      tabIndex={0}
       onClick={() => onSelect?.(task)}
-      onKeyDown={(e) => {
-        if (e.key === ' ') {
-          e.preventDefault();
-          toggle();
-        }
-      }}
       className={[
         'group flex items-center gap-3 px-3 py-2 rounded-lg border transition-colors cursor-pointer',
         selected ? 'bg-ink-700/80 border-ink-200/30' : 'bg-ink-800/40 border-ink-700/50 hover:bg-ink-700/40',
