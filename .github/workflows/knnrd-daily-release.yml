@@ -1,0 +1,67 @@
+name: Knnrd Daily — Build installers
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      upload-artifacts:
+        description: 'Upload build artifacts'
+        required: false
+        default: 'true'
+
+jobs:
+  build:
+    name: ${{ matrix.os }} — ${{ matrix.label }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            label: win (nsis + msi)
+            script: build:win
+            artifact-glob: release/*/Knnrd*.*
+          - os: macos-latest
+            label: mac (dmg)
+            script: build:mac
+            artifact-glob: release/*/Knnrd*.*
+
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build ${{ matrix.label }}
+        env:
+          GH_TOKEN: ''
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npm run ${{ matrix.script }}
+
+      - name: List release artifacts
+        run: ls -lR release/
+
+      - name: Upload artifacts
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.upload-artifacts == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: knnrd-daily-${{ matrix.os }}
+          path: ${{ matrix.artifact-glob }}
+          if-no-files-found: error
+          retention-days: 30
