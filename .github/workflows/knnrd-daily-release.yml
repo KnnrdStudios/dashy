@@ -3,18 +3,13 @@ name: Knnrd Daily — Build installers
 on:
   push:
     tags:
-      - 'knnrd-daily-v*'
+      - 'v*'
   workflow_dispatch:
     inputs:
       upload-artifacts:
         description: 'Upload build artifacts'
         required: false
         default: 'true'
-
-defaults:
-  run:
-    working-directory: knnrd-daily
-    shell: bash
 
 jobs:
   build:
@@ -26,13 +21,17 @@ jobs:
           - os: windows-latest
             label: win (nsis + msi)
             script: build:win
-            artifact-glob: knnrd-daily/release/*/Knnrd*.*
+            artifact-glob: release/*/Knnrd*.*
           - os: macos-latest
-            label: mac (dmg, universal)
+            label: mac (dmg)
             script: build:mac
-            artifact-glob: knnrd-daily/release/*/Knnrd*.*
+            artifact-glob: release/*/Knnrd*.*
 
     runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +41,6 @@ jobs:
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: knnrd-daily/package-lock.json
 
       - name: Install
         run: npm ci
@@ -52,7 +50,6 @@ jobs:
 
       - name: Build ${{ matrix.label }}
         env:
-          # Disable auto-update publishing; we only want local artifacts here.
           GH_TOKEN: ''
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
         run: npm run ${{ matrix.script }}
