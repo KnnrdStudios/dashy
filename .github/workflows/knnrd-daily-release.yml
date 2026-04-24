@@ -1,0 +1,70 @@
+name: Knnrd Daily — Build installers
+
+on:
+  push:
+    tags:
+      - 'knnrd-daily-v*'
+  workflow_dispatch:
+    inputs:
+      upload-artifacts:
+        description: 'Upload build artifacts'
+        required: false
+        default: 'true'
+
+defaults:
+  run:
+    working-directory: knnrd-daily
+    shell: bash
+
+jobs:
+  build:
+    name: ${{ matrix.os }} — ${{ matrix.label }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            label: win (nsis + msi)
+            script: build:win
+            artifact-glob: knnrd-daily/release/*/Knnrd*.*
+          - os: macos-latest
+            label: mac (dmg, universal)
+            script: build:mac
+            artifact-glob: knnrd-daily/release/*/Knnrd*.*
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: knnrd-daily/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build ${{ matrix.label }}
+        env:
+          # Disable auto-update publishing; we only want local artifacts here.
+          GH_TOKEN: ''
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npm run ${{ matrix.script }}
+
+      - name: List release artifacts
+        run: ls -lR release/
+
+      - name: Upload artifacts
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.upload-artifacts == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: knnrd-daily-${{ matrix.os }}
+          path: ${{ matrix.artifact-glob }}
+          if-no-files-found: error
+          retention-days: 30

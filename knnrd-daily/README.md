@@ -24,11 +24,26 @@ Starts Vite + Electron with HMR on the renderer.
 ## Build installers
 
 ```bash
-npm run build:win   # NSIS .exe installer
+npm run build:win   # NSIS .exe installer + .msi (x64)
 npm run build:mac   # .dmg
 ```
 
-Artifacts land in `release/<version>/`.
+Artifacts land in `release/<version>/`:
+
+- `Knnrd Daily-0.1.0-Setup.exe` — NSIS wizard installer with "choose install dir" step
+- `Knnrd Daily-0.1.0.msi` — Windows Installer package (good for Group Policy / enterprise deploy)
+- `Knnrd Daily-0.1.0.dmg` — macOS disk image
+
+> Windows builds **must** run on a Windows host. Cross-building from macOS/Linux works for NSIS via Wine, but MSI requires the Windows SDK / WiX Toolset and is not reliable off-Windows. The GitHub Actions workflow below runs them on native runners.
+
+## CI: native Win + Mac builds
+
+`.github/workflows/knnrd-daily-release.yml` builds installers on `windows-latest` and `macos-latest` runners and uploads them as workflow artifacts. Trigger it by either:
+
+1. **Manual run** — GitHub → Actions → "Knnrd Daily — Build installers" → Run workflow
+2. **Tag push** — `git tag knnrd-daily-v0.1.0 && git push --tags`
+
+Download the `knnrd-daily-windows-latest` and `knnrd-daily-macos-latest` artifacts from the completed run.
 
 ## What's in the app
 

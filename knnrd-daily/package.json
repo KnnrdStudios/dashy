@@ -56,12 +56,21 @@
       "artifactName": "${productName}-${version}.${ext}"
     },
     "win": {
-      "target": ["nsis"],
-      "artifactName": "${productName}-${version}-Setup.${ext}"
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "msi",  "arch": ["x64"] }
+      ]
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "${productName}-${version}-Setup.${ext}"
+    },
+    "msi": {
+      "oneClick": false,
+      "perMachine": false,
+      "runAfterFinish": true,
+      "artifactName": "${productName}-${version}.${ext}"
     }
   }
 }
